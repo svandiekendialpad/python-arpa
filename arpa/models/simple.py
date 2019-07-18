@@ -22,8 +22,8 @@ class ARPAModelSimple(ARPAModel):
         self._counts[order] = count
 
     def add_entry(self, ngram, p, bo=None, order=None):
-        if self._vocabulary is not None:
-            raise FrozenException
+        #if self._vocabulary is not None:
+        #    raise FrozenException
         self._ps[ngram] = p
         if bo is not None:
             self._bos[ngram] = bo
