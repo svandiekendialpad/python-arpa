@@ -21,17 +21,24 @@ class ARPAModelSimple(ARPAModel):
     def add_count(self, order, count):
         self._counts[order] = count
 
+
     def add_entry(self, ngram, p, bo=None, order=None):
-        # Commenting this out because with this the original author
-        # is not allowing an LM to be manipulated
-        #if self._vocabulary is not None:
-        #    raise FrozenException
+        if self._vocabulary is not None:
+            raise FrozenException
+        self._ps[ngram] = p
+        if bo is not None:
+            self._bos[ngram] = bo
+
+    def manipulate_entry(self, ngram, p, bo=None, order=None):
+        # This is like add_entry but allows an entry to be added
+        # after the arpa file was loaded
+        # non-existing n-grams will be added, existing ones will be overwritten
 
         #ngrams have to be parsed like this:
         # ('W1', 'W2', 'W3', 'W4')
         # so that
         # lm._ps[('W1'),] works but lm._ps[('W1')] fails with KeyError
-
+        ngram = tuple(ngram.split(' '))
 
         # update self._counts
         if ngram not in self._ps.keys():
