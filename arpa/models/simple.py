@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from math import log
 
 from .base import ARPAModel
 from .base import UNK
@@ -34,17 +35,23 @@ class ARPAModelSimple(ARPAModel):
         # after the arpa file was loaded
         # non-existing n-grams will be added, existing ones will be overwritten
 
-        #ngrams have to be parsed like this:
-        # ('W1', 'W2', 'W3', 'W4')
-        # so that
-        # lm._ps[('W1'),] works but lm._ps[('W1')] fails with KeyError
+        #ngrams have to be parsed as tuples
         ngram = tuple(ngram.split(' '))
+
+        assert len(ngram) <= max(self._counts.keys())
+        assert p
+        assert type(p) is int or type(p) is float
 
         # update self._counts
         if ngram not in self._ps.keys():
             self._counts[len(ngram)] += 1
 
-        self._ps[ngram] = p
+        if p > 0:
+            self._ps[ngram] = log(p)
+        else:
+            self._ps[ngram] = p
+
+        #assertions for bo?
 
          # We want to keep any existing back-off weights
         if ngram in self._bos.keys():
