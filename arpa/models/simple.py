@@ -47,7 +47,7 @@ class ARPAModelSimple(ARPAModel):
         self._ps[ngram] = p
 
          # We want to keep any existing back-off weights
-        if self._bos[ngram] is not None:
+        if ngram in self._bos.keys():
             bo = self._bos[ngram]
         if bo is not None:
             self._bos[ngram] = bo
