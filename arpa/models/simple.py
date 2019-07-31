@@ -5,6 +5,8 @@ from .base import ARPAModel
 from .base import UNK
 from ..exceptions import FrozenException
 
+def tupleify(ngram):
+    return tuple(ngram.split(' '))
 
 class ARPAModelSimple(ARPAModel):
     def __init__(self, unk=UNK):
@@ -36,7 +38,7 @@ class ARPAModelSimple(ARPAModel):
         # non-existing n-grams will be added, existing ones will be overwritten
 
         #ngrams have to be parsed as tuples
-        ngram = tuple(ngram.split(' '))
+        ngram = tupleify(ngram)
 
         assert len(ngram) <= max(self._counts.keys())
         assert p
